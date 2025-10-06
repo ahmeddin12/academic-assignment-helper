@@ -1,25 +1,26 @@
-version: "3.8"
-
 services:
   postgres:
-    image: postgres:15
+    image: pgvector/pgvector:0.6.2-pg15
+    container_name: academic-assignment-helper-postgres-1
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: academic-assignment-helper-pgadmin-1
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "8080:80"
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:
